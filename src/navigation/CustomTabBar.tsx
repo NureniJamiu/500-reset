@@ -1,89 +1,99 @@
-import React, { useRef, useEffect } from 'react';
-import { Animated, Platform, View, Text, Pressable } from 'react-native';
+import React from 'react';
+import { View, Text, Pressable } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-function TabBarIcon({ isFocused, options, route, color }: any) {
-  const scale = useRef(new Animated.Value(isFocused ? 1.15 : 1)).current;
-  const translateY = useRef(new Animated.Value(isFocused ? -4 : 0)).current;
-
-  useEffect(() => {
-    Animated.parallel([
-      Animated.spring(scale, {
-        toValue: isFocused ? 1.15 : 1,
-        useNativeDriver: true,
-        friction: 5,
-        tension: 150,
-      }),
-      Animated.spring(translateY, {
-        toValue: isFocused ? -4 : 0,
-        useNativeDriver: true,
-        friction: 5,
-        tension: 150,
-      })
-    ]).start();
-  }, [isFocused]);
-
+function TabBarButton({ isFocused, options, label, onPress, testID, accessibilityLabel }: any) {
   return (
-    <Animated.View style={{ transform: [{ scale }, { translateY }] }}>
-      <View className={`p-2 rounded-full ${isFocused ? 'bg-[#ebfcf5]' : 'bg-transparent'}`}>
-        {options.tabBarIcon && options.tabBarIcon({ focused: isFocused, color, size: 24 })}
+    <Pressable
+      accessibilityState={isFocused ? { selected: true } : {}}
+      accessibilityLabel={accessibilityLabel}
+      testID={testID}
+      onPress={onPress}
+      android_ripple={{ color: 'transparent' }}
+      style={{ alignItems: 'center', justifyContent: 'center', paddingTop: 8, paddingBottom: 8, paddingHorizontal: 4 }}
+    >
+      <View style={{ 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        width: 44,
+        height: 44,
+        borderRadius: 9999,
+        backgroundColor: isFocused ? '#00B972' : 'transparent',
+        overflow: 'hidden'
+      }}>
+        {options.tabBarIcon && options.tabBarIcon({ 
+          focused: isFocused, 
+          color: isFocused ? '#FFFFFF' : '#9CA3AF', 
+          size: 22 
+        })}
       </View>
-    </Animated.View>
+      <Text 
+        style={{ 
+          color: isFocused ? '#00B972' : '#9CA3AF', 
+          fontSize: 10, 
+          marginTop: 4, 
+          fontWeight: isFocused ? '600' : '500' 
+        }}
+      >
+        {label}
+      </Text>
+    </Pressable>
   );
 }
 
 export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
+  const insets = useSafeAreaInsets();
+
   return (
-    <View 
-      className="absolute bottom-6 mx-6 rounded-3xl bg-white flex-row justify-between px-6 py-3 border border-neutral-100" 
-      style={{ 
-        shadowColor: '#000', 
-        shadowOpacity: 0.1, 
-        shadowRadius: 20, 
-        shadowOffset: { width: 0, height: 10 },
-        elevation: 10
-      }}
-    >
-      {state.routes.map((route, index) => {
-        const { options } = descriptors[route.key];
-        const label = options.tabBarLabel !== undefined
+    <View style={{ position: 'absolute', bottom: insets.bottom > 0 ? insets.bottom + 8 : 24, left: 0, right: 0, alignItems: 'center' }}>
+      <View
+        className="flex-row items-center bg-white rounded-full px-6 py-1 border border-neutral-100"
+        style={{
+          gap: 16,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 10 },
+          shadowOpacity: 0.08,
+          shadowRadius: 20,
+          elevation: 15,
+        }}
+      >
+        {state.routes.map((route, index) => {
+          const { options } = descriptors[route.key];
+          const label = options.tabBarLabel !== undefined
             ? options.tabBarLabel
             : options.title !== undefined
-            ? options.title
-            : route.name;
+              ? options.title
+              : route.name;
 
-        const isFocused = state.index === index;
+          const isFocused = state.index === index;
 
-        const onPress = () => {
-          const event = navigation.emit({
-            type: 'tabPress',
-            target: route.key,
-            canPreventDefault: true,
-          });
+          const onPress = () => {
+            const event = navigation.emit({
+              type: 'tabPress',
+              target: route.key,
+              canPreventDefault: true,
+            });
 
-          if (!isFocused && !event.defaultPrevented) {
-            navigation.navigate(route.name);
-          }
-        };
+            if (!isFocused && !event.defaultPrevented) {
+              navigation.navigate(route.name);
+            }
+          };
 
-        return (
-          <Pressable
-            key={index}
-            accessibilityState={isFocused ? { selected: true } : {}}
-            accessibilityLabel={options.tabBarAccessibilityLabel}
-            testID={options.tabBarTestID}
-            onPress={onPress}
-            className="items-center justify-center flex-1"
-          >
-            <TabBarIcon isFocused={isFocused} options={options} route={route} color={isFocused ? '#00B972' : '#AFAFAF'} />
-            <Text 
-              className={`text-[10px] mt-1 ${isFocused ? 'text-[#00B972] font-bold' : 'text-neutral-500'}`}
-            >
-              {label as string}
-            </Text>
-          </Pressable>
-        );
-      })}
+          return (
+            <TabBarButton
+              key={index}
+              isFocused={isFocused}
+              options={options}
+              route={route}
+              label={label}
+              onPress={onPress}
+              testID={options.tabBarButtonTestID}
+              accessibilityLabel={options.tabBarAccessibilityLabel}
+            />
+          );
+        })}
+      </View>
     </View>
   );
 }

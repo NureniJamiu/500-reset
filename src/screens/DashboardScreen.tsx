@@ -2,34 +2,13 @@ import React from 'react';
 import { View, ScrollView, Text, Image, TouchableOpacity, Dimensions } from 'react-native';
 import { Ionicons, Feather } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Header } from '../components/Header';
 
 export function DashboardScreen() {
   return (
     <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 120 }} className="bg-[#f7f9f9]">
       {/* Header */}
-      <View className="flex-row items-center justify-between mt-8 mb-6">
-        <View className="flex-row items-center">
-          <View className="w-12 h-12 rounded-full border-2 border-[#00B972] overflow-hidden bg-neutral-200">
-            <Image
-              source={{ uri: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80' }}
-              className="w-full h-full"
-            />
-          </View>
-        </View>
-        <View className="flex-row gap-3">
-          <TouchableOpacity className="w-10 h-10 rounded-full bg-white items-center justify-center shadow-sm">
-            <Ionicons name="notifications-outline" size={20} color="#111" />
-            <View className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#00B972]" />
-          </TouchableOpacity>
-          <TouchableOpacity className="w-10 h-10 rounded-full bg-white items-center justify-center shadow-sm">
-            <Ionicons name="settings-outline" size={20} color="#111" />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <Text className="text-3xl font-extrabold text-[#111] mb-6 tracking-tight">
-        Hello Rebecca!
-      </Text>
+      <Header />
 
       {/* Hero Card */}
       <View className="w-full bg-[#0F3D2F] rounded-[32px] p-6 mb-6 shadow-lg shadow-black/20 relative overflow-hidden">
@@ -58,11 +37,11 @@ export function DashboardScreen() {
         </View>
 
         <View className="flex-row gap-3">
-          <TouchableOpacity className="flex-1 py-3.5 bg-white/10 rounded-full items-center justify-center border border-white/10">
-            <Text className="text-white font-semibold">Redeem</Text>
+          <TouchableOpacity className="flex-1 py-3.5 bg-[#00B972] rounded-full items-center justify-center shadow-sm shadow-[#00B972]/30">
+            <Text className="text-white font-bold tracking-wide">Redeem</Text>
           </TouchableOpacity>
           <TouchableOpacity className="flex-1 py-3.5 bg-white/10 rounded-full items-center justify-center border border-white/10">
-            <Text className="text-white font-semibold">View History</Text>
+            <Text className="text-white/80 font-medium tracking-wide">View History</Text>
           </TouchableOpacity>
         </View>
       </View>
