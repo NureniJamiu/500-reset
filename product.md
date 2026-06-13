@@ -32,10 +32,8 @@ Users collect and dispose of recyclable plastics through the platform and receiv
 
 ## Technology Stack
 - **Framework:** [React Native](https://reactnative.dev/) (via [Expo](https://expo.dev/))
-- **Styling:** [Gluestack UI](https://gluestack.io/)
 
 ### Why Expo?
 Expo is the ideal choice for this project:
 1. **Android Studio Emulator:** You can easily run the app in your emulator by starting the dev server (`npx expo start`) and pressing `a`.
 2. **Mobile Device Preview:** You can instantly preview the app on your physical iOS or Android device by downloading the **Expo Go** app and scanning the QR code shown in your terminal. This makes testing fast and frictionless.
-3. **Gluestack UI Support:** Gluestack UI integrates beautifully with Expo, and they provide quick-start configurations specifically tailored for it.

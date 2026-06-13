@@ -1,4 +1,3 @@
-import { withGluestackUI } from '@gluestack/ui-next-adapter';
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
@@ -10,4 +9,4 @@ const nextConfig = {
   transpilePackages: [],
 };
 
-export default withGluestackUI(nextConfig);
+export default nextConfig;
